@@ -1,0 +1,2 @@
+Neste modulo, foram passados conhecimentos e comandos de git que serao 
+utilizados em todo o curso. Por isso, nao tem exercicios resolvidos aqui. :)
