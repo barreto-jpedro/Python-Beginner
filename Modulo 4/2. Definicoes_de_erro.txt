@@ -1,0 +1,20 @@
+a) Erro de sintaxe 
+    -> Erro que acontece quando erramos a escrita de uma palavra reservada.
+    ex: 'clas carro():' ao inves de 'class carro():'
+
+b) Erro de tempo de execução 
+    -> Erros que aparecem apenas quando estamos executando o programa.
+    ex: No codigo abaixo, caso a variavel valor seja '0', teriamos um erro em tempo de execuçao.
+        valor = int(input('Digite um valor: '))
+        resultado = 10 / valor
+        print('O resultado da divisao e: ', resultado)
+    
+c) Erro semântico
+    -> Erro da logica do programa. O programa nao faz o que se espera dele.
+    ex: 
+        #PROGRAMA PARA SOMAR DOIS NUMEROS:
+        valor = int(input('Digite um valor: '))
+        valor = int(input('Digite OUTRO valor: '))
+
+        print('A soma dos dois numeros eh: ', valor + valor)
+        
