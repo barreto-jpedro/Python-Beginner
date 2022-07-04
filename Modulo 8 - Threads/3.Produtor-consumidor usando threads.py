@@ -9,6 +9,3 @@ Isso acontece pois, a partir do uso de threads, pode-se criar códigos concorren
 códigos que são executados simultaneamente. Dessa maneira, haverá um erro, já que o cosumidor
 tentará consumir dados que ainda não existem.
 """ 
-
-#b) Indique mais um problema clássico da computação e como podemos resolve-los com threads 
-#explicando de forma detalhada 
