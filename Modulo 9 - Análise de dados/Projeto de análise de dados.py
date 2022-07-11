@@ -1,20 +1,16 @@
-# importa a biblioteca pandas
+#Importa a biblioteca pandas
 import pandas as pd
 
-# armazena os dados da tabela em uma estrutura tipo data frame
+#Armazena os dados da tabela em uma estrutura tipo data frame
 df = pd.read_csv("Dados_projeto_modulo_9.csv",sep = ';', encoding="latin-1")
 
-# visualizar alguns dados da tabela carregada
-print()
+#Visualizar alguns dados da tabela carregada
 print(df.head())
-print(df.Região.value_counts())
-print()
 
 #Qual a quantidade de reclamações registradas?
 print()
-quantidade_de_linhas = len(df.index)
-print("quantidade_de_linhas: ",quantidade_de_linhas)
-print()
+quantidade_de_reclamacoes = len(df.index)
+print("Quantidade de reclamações registradas: ",quantidade_de_reclamacoes)
 
 #Qual é o tempo médio, máximo e mínimo de resposta?
 print()
@@ -26,7 +22,6 @@ print("tempo_minimo: ",tempo_minimo)
 
 tempo_medio = df["Tempo Resposta"].mean()
 print("tempo_medio: ",tempo_medio)
-print()
 
 #Qual é a nota média, máxima e mínima do consumidor?
 print()
@@ -38,37 +33,46 @@ print("nota_minima: ",nota_minima)
 
 nota_media = df["Nota do Consumidor"].mean()
 print("nota_media: ",nota_media)
-print()
 
 #Como podemos correlacionar a nota do consumidor com o tempo de resposta? Explique.
-not_related = 0
-related = 0
-total = 0
+inversamente_proporcional = 0
+diretamente_proporcional = 0
 
 for (nota, tempo) in zip(df["Nota do Consumidor"], df["Tempo Resposta"]) :
+    #Nota alta e o tempo baixo - Inversamente proporcional
     if nota > nota_media and tempo < tempo_medio:
-        related+=1
+        inversamente_proporcional+=1
     
+    #Nota baixa e o tempo alto - Inversamente proporcional
     elif nota < nota_media and tempo > tempo_medio:
-        related+=1
+        inversamente_proporcional+=1
     
+    #Nota baixa e o tempo baixo - Diretamente proporcional
     elif nota < nota_media and tempo < tempo_medio:
-        not_related+=1
-    
+        diretamente_proporcional+=1
+
+    #Nota alta e o tempo alto - Diretamente proporcional
     elif nota > nota_media and tempo > tempo_medio:
-        not_related+=1
-    
-    total+=1
+        diretamente_proporcional+=1
 
-percetage_related = related/total
-percetage_not_related = not_related/total
+if diretamente_proporcional > 2 * inversamente_proporcional: 
+    print("As grandezas são DIRETAMENTE proporcionais. ")
 
+elif inversamente_proporcional > 2 * diretamente_proporcional:
+    print("As grandezas são INVERSAMENTE proporcionais. ")
 
-print("related",percetage_related)
-print("not_related",percetage_not_related)
+else:
+    print("Os dados são inconclusivos para estabelecer uma relação entre as grandezas.")
 
 #Qual a quantidade de reclamações por Sexo?
+print(f"Quantidade de reclamações por Sexo: {df.Sexo.value_counts()}")
 
 #Qual a quantidade de reclamações por Estado?
+print(f"Quantidade de reclamações por Estado: {df.Região.value_counts()}")
 
 #Qual é a porcentagem de reclamações registradas e não respondidas?
+total = df.Total.value_counts().to_list()[0]
+nao_respondidas = df.Respondida.value_counts().to_list()[1]
+porcentagem_nao_respondida = (1-nao_respondidas/total)*100
+
+print(f"A porcentagem de reclamações registradas e não respondidas eh: {porcentagem_nao_respondida}%")
