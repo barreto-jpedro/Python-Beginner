@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt
 from sklearn import datasets, svm, metrics
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+
 
 
 #1 – Crie um modelo de classificação de imagens, a partir da importação da base
@@ -9,42 +9,34 @@ from sklearn.model_selection import train_test_split
 #a) Utilize a base de dados Mnist Dataset
 digits = datasets.load_digits()
 
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, label in zip(axes, digits.images, digits.target):
-    ax.set_axis_off()
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
-    ax.set_title('Training: %i' % label)
-
 
 #b) Divida a base de treinamento e teste em 80/20.
 n_samples = len(digits.images)
 data = digits.images.reshape((n_samples, -1))
 
-clf = svm.SVC(gamma=0.001)
 
 X_train, X_test, y_train, y_test = train_test_split(
     data, digits.target, test_size=0.2, shuffle=False)
 
+
+#c) Utilize a técnica de Cross Validation
+clf = svm.SVC(gamma=0.001)
 clf.fit(X_train, y_train)
 
-predicted = clf.predict(X_test)
+cross_val_score = cross_val_score(clf, data, digits.target, cv=5)
+print(f"Cross_val_score: {cross_val_score}" )
+ 
+#d) Utilize a técnica de Random Search ou Grid Search para escolha dos melhores parâmetros
 
+# Definição dos Hiperparâmetros a serem variados pelo GridSearch
+parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
 
-#c) Utilize a técnica de Cross Validation (K-fold = 5)
-
-
-#d) Utilize a técnica de Random Search ou Grid Search para escolha dos melhores
-# parâmetros
-
+svc = svm.SVC(gamma=0.001)
+clf = GridSearchCV(clf, parameters)
+clf.fit(X_train, y_train)
 
 #e) Faça a impressão da matriz de confusão para o modelo
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, prediction in zip(axes, X_test, predicted):
-    ax.set_axis_off()
-    image = image.reshape(8, 8)
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
-    ax.set_title(f'Prediction: {prediction}')
-
+predicted = clf.predict(X_test)
 print(f"Classification report for classifier {clf}:\n"
     f"{metrics.classification_report(y_test, predicted)}\n")
 
@@ -65,7 +57,7 @@ print(f"Classification report for classifier {clf}:\n"
 
 
 #c) Quais foram os melhores parâmetros escolhidos? Justifique
-# Os melhores parametros foram: ......
+# Os melhores parametros foram: kernel e C
 
 #d) Quais as principais dificuldades encontradas para a criação do seu modelo
 # de classificação?
@@ -82,8 +74,8 @@ print(f"Classification report for classifier {clf}:\n"
 
 #a) Qual é a diferença entre um parâmetro de modelo e um algoritmo de
 # aprendizagem de hiperparâmetro?
-# Enquanto um parâmetro é o que o modelo aprende/adapta com o seu treino, um hiperparâmetro
-# é tudo que é informado para o algoritmo antes dele começar os treinos.
+# A principal diferença é que, enquanto um parâmetro é o que o modelo aprende/adapta com o seu treino, 
+# um hiperparâmetro é tudo que é informado para o algoritmo antes dele começar os treinos.
 
 
 #b) Você pode citar quatro dos principais desafios do aprendizado de
